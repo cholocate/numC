@@ -91,7 +91,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -2;
     }
 
-    curr->data = calloc((long unsigned int) rows * cols, sizeof(double));
+    curr->data = calloc((long unsigned int) (rows * cols), sizeof(double));
 
     if (curr->data == NULL) {
         return -2;
