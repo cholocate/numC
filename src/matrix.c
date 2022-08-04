@@ -93,7 +93,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -2;
     }
 
-    curr->data = (double*) malloc( rows * cols * sizeof(double));
+    curr->data = calloc( rows * cols, sizeof(double));
 
     if (curr->data == NULL) {
         return -2;
