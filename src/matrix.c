@@ -49,7 +49,7 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
  */
 double get(matrix *mat, int row, int col) {
     // Task 1.1 TODO
-    return mat[row][col];
+    return mat[mat->rows * row + col];
 }
 
 /*
@@ -58,8 +58,7 @@ double get(matrix *mat, int row, int col) {
  */
 void set(matrix *mat, int row, int col, double val) {
     // Task 1.1 TODO
-
-    mat[row][col] = val;
+    mat[mat->rows * row + col] = val;
 }
 
 /*
@@ -134,7 +133,7 @@ void deallocate_matrix(matrix *mat) {
         deallocate_matrix(mat->parent);
         free(mat);
     }
-    
+
     return;
 }
 
