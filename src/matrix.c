@@ -82,6 +82,32 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     // 6. Set the `ref_cnt` field to 1.
     // 7. Store the address of the allocated matrix struct at the location `mat` is pointing at.
     // 8. Return 0 upon success.
+    if (rows < 1 || cols < 1) {
+        return -1;
+    }
+
+    new_mat = (matrix**) malloc(sizeof(matrix));
+
+    if (new_mat == NULL) {
+        return -2;
+    }
+
+    new_mat->data = (double*) calloc(rows * cols, sizeof(double));
+
+    if (new_mat->data == NULL) {
+        return -2;
+    }
+
+    new_mat->rows = rows;
+    new_mat->cols = cols;
+    new_mat->parent = NULL;
+    new_mat->ref_cnt = 1;
+
+    mat = &new_mat;
+
+
+
+    return 0;
 }
 
 /*
@@ -95,6 +121,21 @@ void deallocate_matrix(matrix *mat) {
     // 1. If the matrix pointer `mat` is NULL, return.
     // 2. If `mat` has no parent: decrement its `ref_cnt` field by 1. If the `ref_cnt` field becomes 0, then free `mat` and its `data` field.
     // 3. Otherwise, recursively call `deallocate_matrix` on `mat`'s parent, then free `mat`.
+    if (mat == NULL) {
+        return;
+    }
+    if (mat->parent == NULL) {
+        mat->ref_cnt = mat->ref_cnt - 1;
+        if (mat->ref_cnt == 0) {
+            free(mat->data);
+            free(mat);
+        }
+    } else {
+        deallocate_matrix(mat->parent);
+        free(mat);
+    }
+    
+    return;
 }
 
 /*
