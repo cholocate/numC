@@ -292,9 +292,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int rowR = mat1->rows;
     int colR = mat2->cols;
     int dimsR = rowR * colR;
-    double* data1 = mat1->data;
-    double* data2 = mat2->data;
-    double* res_data = result->data;
+    double *data1 = mat1->data;
+    double *data2 = mat2->data;
+    double *res_data = result->data;
 
     for (int i = 0; i < rowR; i++) {
         for (int j = 0; j < colR; j++) {
