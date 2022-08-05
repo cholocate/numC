@@ -170,8 +170,8 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
     }
 
     child->data = from->data + offset; 
-    child->rows = row; 
-    child->cols = col; 
+    child->rows = rows; 
+    child->cols = cols; 
     child->parent = from; 
     from->ref_cnt = from->ref_cnt + 1; 
     *mat = child; 
