@@ -313,7 +313,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 /* 
 * Stores the identity matrix in result.
 */
-int np_eye(matrix *result, int val) {
+int np_eye(matrix *result, double val) {
     int dims = result->cols * result->cols;
     int counter = 0;
     for (int i = 0; i < dims; i++) {
@@ -322,22 +322,14 @@ int np_eye(matrix *result, int val) {
             i++;
             counter++;
         } else {
-            result->data[i] = 0;
+            result->data[i] = 0.0;
         }
     }
 
     return 0;
 }
 
-/*
-* Copies all the contents of mat to result
-*/
-int copy_matrix(matrix *result, matrix *mat) {
-    for (int i = 0; i < result->cols * result->cols; i++) {
-        result->data[i] = mat->data[i];
-    }
-    return 0;
-}
+
 
 /*
  * Store the result of raising mat to the (pow)th power to `result`.
@@ -348,19 +340,37 @@ int copy_matrix(matrix *result, matrix *mat) {
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     // Task 1.6 TODO
+    int dims = result->cols * result->cols;
     if (pow == 0) {
-        np_eye(result, 1);
+        np_eye(result, 1.0);
+        return 0;
+    } else if (pow == 1) {
+        memcpy(result->data, mat->data, dims * sizeof(double));
         return 0;
     } else {
-        matrix **temp;
-        allocate_matrix(**temp, result->rows, result->cols);
-        copy_matrix(*temp, mat);
-        while (pow != 1) {
-            mul_matrix(result, *temp, mat);
-            *temp = result;
-            pow = pow - 1;
+
+    
+        matrix *temp;
+        matrix *temp2;
+        allocate_matrix(&temp, result->rows, result->cols);
+        allocate_matrix(&temp2, result->rows, result->cols);
+        if (temp == NULL) {
+            return -1;
         }
-        deallocate_matrix(*temp);
+        if (temp2 == NULL) {
+            return -1;
+        }
+
+        mul_matrix(temp, mat, mat);
+        pow_matrix(temp2, temp, pow / 2);
+        if (pow % 2 == 1) {
+            mult_matrix(result, temp2, mat);
+        } else {
+            memcpy(result->data, temp2->data, dims * sizeof(double));
+        }
+
+        deallocate_matrix(temp);
+        deallocate_matrix(temp2);
         return 0;
     }
 }
