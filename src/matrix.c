@@ -291,12 +291,21 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
     int rowR = mat1->rows;
     int colR = mat2->cols;
-    double *data1 = mat1->data;
-    double *data2 = mat2->data;
+    int data1;
+    int data2;
+
     double *res_data = result->data;
 
-
-    return 0;
+    for (int i = 0; i < rowR; i++) {
+        for (int j = 0; j < colR; j++) {
+            set(result, i, j, 0);
+            for (int k = 0; k < mat1->cols; k++) {
+                data1 = get(mat1, i, k);
+                data2 = get(mat2, k, j); 
+                set(result, i, j, data1 * data2);
+            }
+        }
+    }
 }
 
 /*
