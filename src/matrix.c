@@ -215,14 +215,15 @@ int abs_matrix(matrix *result, matrix *mat) {
     double *data_res = result->data;
     int size = mat->rows * mat->cols;
 
-    for (int i = 0; i < size/16 * 16; i+= 16) {
+    #pragma omp parallel for
+    for (int i = 0; i < size/4 * 4; i+= 4) {
         data_res[i] = abs(data[i]);
-        data_res[i + 4] = abs(data[i + 4]);
-        data_res[i + 8] = abs(data[i + 8]);
-        data_res[i + 12] = abs(data[i + 12]);
+        data_res[i + 1] = abs(data[i + 1]);
+        data_res[i + 2] = abs(data[i + 2]);
+        data_res[i + 3] = abs(data[i + 3]);
     }
 
-    for (int i = size/16 * 16; i < size; i++) {
+    for (int i = size/4 * 4; i < size; i++) {
         data_res[i] = abs(data[i]);
     }
 
@@ -254,15 +255,16 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     double *data2 = mat2->data;
     double *res = result->data;
 
-    for (int i = 0; i < dims/16 * 16; i+= 16) {
+    #pragma omp parallel for
+    for (int i = 0; i < dims/4 * 4; i+= 4) {
         res[i] = data1[i] + data2[i];
-        res[i + 4] = data1[i + 4] + data2[i + 4];
-        res[i + 8] = data1[i + 8] + data2[i + 8];
-        res[i + 12] = data1[i + 12] + data2[i + 12];
+        res[i + 1] = data1[i + 1] + data2[i + 1];
+        res[i + 2] = data1[i + 2] + data2[i + 2];
+        res[i + 3] = data1[i + 3] + data2[i + 3];
     }
 
     //tail case
-    for (int i = dims/16 * 16; i < dims; i++) {
+    for (int i = dims/4 * 4; i < dims; i++) {
         res[i] = data1[i] + data2[i];
     }
     return 0;
