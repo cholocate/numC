@@ -210,6 +210,24 @@ void fill_matrix(matrix *mat, double val) {
  */
 int abs_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
+    //_mm_abs_epi8
+    double *data = mat->data; 
+    double *data_res = result->data;
+    int size = mat->rows * mat->cols;
+
+    for (int i = 0; i < size/16 * 16; i+= 16) {
+        data_res[i] = abs(data[i]);
+        data_res[i + 4] = abs(data[i + 4]);
+        data_res[i + 8] = abs(data[i + 8]);
+        data_res[i + 12] = abs(data[i + 12]);
+    }
+
+    for (int i = size/16 * 16; i < size; i++) {
+        data_res[i] = abs(data[i]);
+    }
+    
+    return 0;
+
 }
 
 /*
@@ -220,6 +238,7 @@ int abs_matrix(matrix *result, matrix *mat) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
+    return 0;
 }
 
 /*
