@@ -49,7 +49,7 @@ void rand_matrix(matrix *result, unsigned int seed, double low, double high) {
  */
 double get(matrix *mat, int row, int col) {
     // Task 1.1 TODO
-    return mat->data[row * mat->cols + col];
+    return (*(mat->data))[row * mat->cols + col];
 }
 
 /*
@@ -58,7 +58,7 @@ double get(matrix *mat, int row, int col) {
  */
 void set(matrix *mat, int row, int col, double val) {
     // Task 1.1 TODO
-    mat->data[row * mat->cols + col] = val;
+    (*(mat->data))[row * mat->cols + col] = val;
 }
 
 /*
@@ -85,26 +85,22 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -1;
     }
 
-    struct matrix *curr = malloc(sizeof(matrix));
+    *mat = (matrix *) malloc(sizeof(matrix));
 
-    if (curr == NULL) {
+    if (*mat == NULL) {
         return -2;
     }
 
-    curr->data = calloc( (rows * cols), sizeof(double));
+    *mat->data = calloc( (rows * cols), sizeof(double));
 
-    if (curr->data == NULL) {
+    if (*mat->data == NULL) {
         return -2;
     }
 
-    curr->rows = rows;
-    curr->cols = cols;
-    curr->parent = NULL;
-    curr->ref_cnt = 1;
-
-    *mat = curr;
-
-
+    (*mat)->rows = rows;
+    (*mat)->cols = cols;
+    (*mat)->parent = NULL;
+    (*mat)->ref_cnt = 1;
 
     return 0;
 }
@@ -126,7 +122,7 @@ void deallocate_matrix(matrix *mat) {
     if (mat->parent == NULL) {
         mat->ref_cnt = mat->ref_cnt - 1;
         if (mat->ref_cnt == 0) {
-            free(mat->data);
+            free(*(mat->data));
             free(mat);
         }
     } else {
