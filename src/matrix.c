@@ -85,7 +85,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -1;
     }
 
-    struct matrix *curr = malloc(sizeof(struct matrix));
+    struct matrix *curr = malloc(sizeof(matrix));
 
     if (curr == NULL) {
         return -2;
