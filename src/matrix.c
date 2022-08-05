@@ -291,11 +291,9 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
     int rowR = mat1->rows;
     int colR = mat2->cols;
-    int data1;
-    int data2;
-    int curr;
-
-    double *res_data = result->data;
+    double data1;
+    double data2;
+    double curr;
 
     for (int i = 0; i < rowR; i++) {
         for (int j = 0; j < colR; j++) {
@@ -338,7 +336,7 @@ int copy_matrix(matrix *result, matrix *mat) {
     for (int i = 0; i < result->cols * result->cols; i++) {
         result->data[i] = mat->data[i];
     }
-
+    return 0;
 }
 
 /*
