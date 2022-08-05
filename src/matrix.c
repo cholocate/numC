@@ -265,6 +265,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     for (int i = dims/16 * 16; i < dims; i++) {
         res[i] = data1[i] + data2[i];
     }
+    return 0;
 }
 
 /*
