@@ -259,11 +259,11 @@ void pow_test(void) {
 
   CU_ASSERT_EQUAL(allocate_matrix(&identity, 3, 3), 0); //custom test
   CU_ASSERT_EQUAL(allocate_matrix(&result2, 3, 3), 0);
-  np_eye(identity, 3);
+  np_eye(identity, 3.0);
   pow_matrix(result2, identity, 2);
-  CU_ASSERT_EQUAL(get(result2, 0, 0), 9);
-  CU_ASSERT_EQUAL(get(result2, 2, 2), 9);
-  CU_ASSERT_EQUAL(get(result2, 1, 2), 0);
+  CU_ASSERT_EQUAL(get(result2, 0, 0), 9.0);
+  CU_ASSERT_EQUAL(get(result2, 2, 2), 9.0);
+  CU_ASSERT_EQUAL(get(result2, 1, 2), 0.0);
 
 
   set(mat, 0, 0, 1);
