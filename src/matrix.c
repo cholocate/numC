@@ -352,8 +352,8 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         np_eye(result, 1);
         return 0;
     } else {
-        matrix** temp;
-        allocate_matrix(temp, result->rows, result->cols);
+        matrix **temp;
+        allocate_matrix(**temp, result->rows, result->cols);
         copy_matrix(*temp, mat);
         while (pow != 1) {
             mul_matrix(result, *temp, mat);
