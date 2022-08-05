@@ -183,6 +183,24 @@ int allocate_matrix_ref(matrix **mat, matrix *from, int offset, int rows, int co
  */
 void fill_matrix(matrix *mat, double val) {
     // Task 1.5 TODO
+
+    int rows = mat->rows;
+    int cols = mat->cols; 
+    int size = rows * cols;
+    double *data = mat->data;
+
+    //loop unrolling, will need to adapt with parallelism later
+    for (int i = 0; i < size/16 * 16; i+= 16) {
+        data[i] = val;
+        data[i + 4] = val;
+        data[i + 8] = val;
+        data[i + 12] = val;
+    }
+
+    //tail case 
+    for (int i = size/16 * 16; i < size; i++) {
+        data[i] = val;
+    }
 }
 
 /*
