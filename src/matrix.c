@@ -91,7 +91,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
         return -2;
     }
 
-    curr->data = calloc((long unsigned int) (rows * cols), sizeof(double));
+    curr->data = calloc( (rows * cols), sizeof(double));
 
     if (curr->data == NULL) {
         return -2;
@@ -102,7 +102,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     curr->parent = NULL;
     curr->ref_cnt = 1;
 
-    mat = &curr;
+    mat = curr;
 
 
 
