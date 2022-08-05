@@ -258,6 +258,7 @@ void pow_test(void) {
   CU_ASSERT_EQUAL(allocate_matrix(&mat, 2, 2), 0);
 
   CU_ASSERT_EQUAL(allocate_matrix(&identity, 3, 3), 0); //custom test
+  CU_ASSERT_EQUAL(allocate_memoy(&result2, 3, 3), 0);
   np_eye(identity, 3);
   pow_matrix(result2, identity, 2);
   CU_ASSERT_EQUAL(get(result, 0, 0), 9);
@@ -281,6 +282,8 @@ void pow_test(void) {
   CU_ASSERT_EQUAL(get(result, 1, 1), 34);
   deallocate_matrix(result);
   deallocate_matrix(mat);
+  deallocate_matrix(result2); //custom tests
+  deallocate_matrix(identity);
 }
 
 /************* Test Runner Code goes here **************/
