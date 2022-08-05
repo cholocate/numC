@@ -293,6 +293,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int colR = mat2->cols;
     int data1;
     int data2;
+    int curr;
 
     double *res_data = result->data;
 
@@ -302,7 +303,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             for (int k = 0; k < mat1->cols; k++) {
                 data1 = get(mat1, i, k);
                 data2 = get(mat2, k, j); 
-                set(result, i, j, data1 * data2);
+                curr = get(result, i, j);
+                set(result, i, j, curr + (data1 * data2));
             }
         }
     }
