@@ -315,12 +315,12 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 /* 
 * Stores the identity matrix in result.
 */
-int np_eye(matrix *result) {
+int np_eye(matrix *result, int val) {
     int dims = result->cols * result->cols;
     int counter = 0;
     for (int i = 0; i < dims; i++) {
         if (i % result->cols == counter) {
-            result->data[i] = 1;
+            result->data[i] = val;
             i++;
             counter++;
         } else {
@@ -341,7 +341,7 @@ int np_eye(matrix *result) {
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     // Task 1.6 TODO
     if (pow == 0) {
-        np_eye(result);
+        np_eye(result, 1);
         return 0;
     } else {
 

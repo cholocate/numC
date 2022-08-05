@@ -252,8 +252,19 @@ void mul_non_square_test(void) {
 void pow_test(void) {
   matrix *result = NULL;
   matrix *mat = NULL;
+  matrix *identity = NULL; //custom test
+  matrix *result2 = NULL; //custom test
   CU_ASSERT_EQUAL(allocate_matrix(&result, 2, 2), 0);
   CU_ASSERT_EQUAL(allocate_matrix(&mat, 2, 2), 0);
+
+  CU_ASSERT_EQUAL(allocate_matrix(&identity, 3, 3), 0); //custom test
+  np_eye(identity, 3);
+  pow_matrix(result2, identity, 2);
+  CU_ASSERT_EQUAL(get(result, 0, 0), 9);
+  CU_ASSERT_EQUAL(get(result, 2, 2), 9);
+  CU_ASSERT_EQUAL(get(result, 1, 2), 0);
+
+
   set(mat, 0, 0, 1);
   set(mat, 0, 1, 1);
   set(mat, 1, 0, 1);
