@@ -364,7 +364,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         mul_matrix(temp, mat, mat);
         pow_matrix(temp2, temp, pow / 2);
         if (pow % 2 == 1) {
-            mult_matrix(result, temp2, mat);
+            mul_matrix(result, temp2, mat);
         } else {
             memcpy(result->data, temp2->data, dims * sizeof(double));
         }
