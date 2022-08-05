@@ -332,6 +332,16 @@ int np_eye(matrix *result, int val) {
 }
 
 /*
+* Copies all the contents of mat to result
+*/
+int copy_matrix(matrix *result, matrix *mat) {
+    for (int i = 0; i < result->cols * result->cols; i++) {
+        result->data[i] = mat->data[i];
+    }
+
+}
+
+/*
  * Store the result of raising mat to the (pow)th power to `result`.
  * Return 0 upon success.
  * Remember that pow is defined with matrix multiplication, not element-wise multiplication.
@@ -344,18 +354,11 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         np_eye(result, 1);
         return 0;
     } else {
-
-        if (pow == 1) {
-            for (int i = 0; i < result->cols * result->cols; i++) {
-                result->data[i] = mat->data[i];
-            }
-            return 0;
-        } else {
-            while (pow != 1) {
-                mul_matrix(result, mat, mat);
-                pow = pow - 1;
-            }
-
+        copy_matrix(result, mat);
+        while (pow != 1) {
+            mul_matrix(result, result, mat);
+            pow = pow - 1;
         }
+        return 0;
     }
 }
