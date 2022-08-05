@@ -102,7 +102,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     curr->parent = NULL;
     curr->ref_cnt = 1;
 
-    mat = curr;
+    *mat = &curr;
 
 
 
