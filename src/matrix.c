@@ -289,6 +289,21 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
+    int rowR = mat1->rows;
+    int colR = mat2->cols;
+    int dimsR = rowR * colR;
+    double* data1 = mat1->data;
+    double* data2 = mat2->data;
+    double* res_data = result->data;
+
+    for (int i = 0; i < rowR; i++) {
+        for (int j = 0; j < colR; j++) {
+            res_data[i][j] = 0;
+            for (int k = 0; k < mat1->cols; k++) {
+                res_data[i][j] += data1[i][k] + data2[k][j];
+            }
+        }
+    }
 }
 
 /*
