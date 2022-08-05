@@ -308,6 +308,26 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
             }
         }
     }
+    return 0;
+}
+
+
+/* 
+* Stores the identity matrix in result.
+*/
+int np_eye(matrix *result) {
+    int dims = result->cols * result->cols;
+    int counter = 0;
+    for (int i = 0; i < dims; i++) {
+        if (i % result->cols == counter) {
+            result->data[i] = 1;
+            i++;
+        } else {
+            result->data[i] = 0;
+        }
+    }
+
+    return 0;
 }
 
 /*
@@ -319,4 +339,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int pow_matrix(matrix *result, matrix *mat, int pow) {
     // Task 1.6 TODO
+    if (pow == 0) {
+        np_eye(result);
+        return 0;
+    } else {
+
+        if (pow == 1) {
+            for (int i = 0; i < result->cols * result->cols; i++) {
+                result->data[i] = mat->data[i];
+            }
+            return 0;
+        } else {
+            mul_matrix(result, mat, mat);
+            pow_matrix(result, mat, pow - 1);
+        }
+
+    }
 }
