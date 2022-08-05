@@ -225,7 +225,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     for (int i = size/16 * 16; i < size; i++) {
         data_res[i] = abs(data[i]);
     }
-    
+
     return 0;
 
 }
@@ -249,6 +249,22 @@ int neg_matrix(matrix *result, matrix *mat) {
  */
 int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.5 TODO
+    int dims = mat1->rows * mat1->cols;
+    double *data1 = mat1->data;
+    double *data2 = mat2->data;
+    double *res = result->data;
+
+    for (int i = 0; i < dims/16 * 16; i+= 16) {
+        res[i] = data1[i] + data2[i];
+        res[i + 4] = data1[i + 4] + data2[i + 4];
+        res[i + 8] = data1[i + 8] + data2[i + 8];
+        res[i + 12] = data1[i + 12] + data2[i + 12];
+    }
+
+    //tail case
+    for (int i = dims/16 * 16; i < dims; i++) {
+        res[i] = data1[i] + data2[i];
+    }
 }
 
 /*
@@ -260,6 +276,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.5 TODO
+    return 0;
 }
 
 /*
