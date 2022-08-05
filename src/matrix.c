@@ -354,11 +354,15 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         np_eye(result, 1);
         return 0;
     } else {
-        copy_matrix(result, mat);
+        matrix* temp;
+        allocate_matrix(temp);
+        copy_matrix(temp, mat);
         while (pow != 1) {
-            mul_matrix(result, result, mat);
+            mul_matrix(result, temp, mat);
+            *temp = result;
             pow = pow - 1;
         }
+        deallocate_matrix(temp);
         return 0;
     }
 }
