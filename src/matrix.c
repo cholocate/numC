@@ -358,7 +358,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         allocate_matrix(temp, result->rows, result->cols);
         copy_matrix(*temp, mat);
         while (pow != 1) {
-            mul_matrix(result, temp, mat);
+            mul_matrix(result, *temp, mat);
             *temp = result;
             pow = pow - 1;
         }
