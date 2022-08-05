@@ -190,15 +190,15 @@ void fill_matrix(matrix *mat, double val) {
     double *data = mat->data;
 
     //loop unrolling, will need to adapt with parallelism later
-    for (int i = 0; i < size/16 * 16; i+= 16) {
+    for (int i = 0; i < size/4 * 4; i+= 4) {
         data[i] = val;
-        data[i + 4] = val;
-        data[i + 8] = val;
-        data[i + 12] = val;
+        data[i + 1] = val;
+        data[i + 2] = val;
+        data[i + 3] = val;
     }
 
     //tail case 
-    for (int i = size/16 * 16; i < size; i++) {
+    for (int i = size/4 * 4; i < size; i++) {
         data[i] = val;
     }
 }
