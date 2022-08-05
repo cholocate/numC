@@ -189,7 +189,7 @@ void fill_matrix(matrix *mat, double val) {
     int size = rows * cols;
     double *data = mat->data;
 
-    //loop unrolling, will need to adapt with parallelism later
+    #pragma omp parallel for
     for (int i = 0; i < size/4 * 4; i+= 4) {
         data[i] = val;
         data[i + 1] = val;
