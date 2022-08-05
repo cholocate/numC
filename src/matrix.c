@@ -322,6 +322,7 @@ int np_eye(matrix *result) {
         if (i % result->cols == counter) {
             result->data[i] = 1;
             i++;
+            counter++;
         } else {
             result->data[i] = 0;
         }
@@ -350,9 +351,11 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
             }
             return 0;
         } else {
-            mul_matrix(result, mat, mat);
-            pow_matrix(result, mat, pow - 1);
-        }
+            while (pow != 1) {
+                mul_matrix(result, mat, mat);
+                pow = pow - 1;
+            }
 
+        }
     }
 }
