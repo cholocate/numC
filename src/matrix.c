@@ -215,20 +215,18 @@ int abs_matrix(matrix *result, matrix *mat) {
     double *data_res = result->data;
     int size = mat->rows * mat->cols;
 
-    #pragma omp parallel for
-    {
-        for (int i = 0; i < size/4 * 4; i+= 4) {
-            data_res[i] = data[i] > 0? data[i]: -data[i];
-            data_res[i + 1] = data[i + 1] > 0? data[i + 1]: -data[i + 1];
-            data_res[i + 2] = data[i + 2] > 0? data[i + 2]: -data[i + 2];
-            data_res[i + 3] = data[i + 3] > 0? data[i + 3]: -data[i + 3];
-        }
-        for (int i = size/4 * 4; i < size; i++) {
-            data_res[i] = data[i] > 0? data[i]: -data[i];
-        }
+    #pragma omp parallel for 
+    for (int i = 0; i < size/4 * 4; i+= 4) {
+        data_res[i] = data[i] > 0? data[i]: -data[i];
+        data_res[i + 1] = data[i + 1] > 0? data[i + 1]: -data[i + 1];
+        data_res[i + 2] = data[i + 2] > 0? data[i + 2]: -data[i + 2];
+        data_res[i + 3] = data[i + 3] > 0? data[i + 3]: -data[i + 3];
+    }
+
+    for (int i = size/4 * 4; i < size; i++) {
+        data_res[i] = data[i] > 0? data[i]: -data[i];
     }
     
-
     return 0;
 
 }
