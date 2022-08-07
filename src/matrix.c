@@ -353,7 +353,7 @@ int transpose_matrix(matrix *result, matrix *mat2) {
     int index = 0;
     for (int col = 0; col < colL; col++) {
         for (int row = 0; row < rowL; row++) {
-            result[index] = mat2[col + row * colL]; //column major order
+            result->data[index] = mat2->data[col + row * colL]; //column major order
             index++;
         }
     }
