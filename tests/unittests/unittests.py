@@ -193,3 +193,10 @@ class TestSlice(TestCase):
         dp_mat, nc_mat = rand_dp_nc_matrix(2, 2, seed=0)
         self.assertTrue(cmp_dp_nc_matrix(dp_mat[0], nc_mat[0]))
         self.assertTrue(cmp_dp_nc_matrix(dp_mat[1], nc_mat[1]))
+# class TestTranspose(TestCase):
+#     def test_small_transpose(self):
+#         dp_mat1, nc_mat1 = rand_dp_nc_matrix(2, 2, seed=0)
+#         dp_mat2, nc_mat2 = rand_dp_nc_matrix(2, 2, seed=1)
+#         is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "tra")
+#         self.assertTrue(is_correct)
+#         print_speedup(speed_up)

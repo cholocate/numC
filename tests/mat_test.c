@@ -189,6 +189,27 @@ void abs_test(void) {
   deallocate_matrix(mat);
 }
 
+void transpose_test(void) {
+  matrix *result = NULL;
+  matrix *mat = NULL;
+  CU_ASSERT_EQUAL(allocate_matrix(&result, 2, 2), 0);
+  CU_ASSERT_EQUAL(allocate_matrix(&mat, 2, 2), 0);
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      set(mat, i, j, i * 2 + j);
+    }
+  }
+  transpose(result, mat);
+  for (int i = 0; i < 2; i++) {
+    for (int j = 0; j < 2; j++) {
+      CU_ASSERT_EQUAL(get(result, i, j), j * 2 + i);
+    }
+  }
+
+  deallocate_matrix(result);
+  deallocate_matrix(mat);
+}
+
 void mul_square_test(void) {
   matrix *result = NULL;
   matrix *mat1 = NULL;

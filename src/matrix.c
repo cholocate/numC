@@ -311,54 +311,54 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  * You may assume `mat1` and `mat2` have the same dimensions.
  * Note that the matrix is in row-major order.
  */
-int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
-    // Task 1.5 TODO
-    int dims = mat1->rows * mat1->cols;
-    double *data1 = mat1->data;
-    double *data2 = mat2->data;
-    double *res = result->data;
+// int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
+//     // Task 1.5 TODO
+//     int dims = mat1->rows * mat1->cols;
+//     double *data1 = mat1->data;
+//     double *data2 = mat2->data;
+//     double *res = result->data;
 
-    #pragma omp parallel for
-    for (int i = 0; i < dims/4 * 4; i+= 4) {
-        __m256d load_data1 = _mm256_loadu_pd((double *) (data1 + i)); //loads the first 4 elements of data1
-        __m256d load_data2 = _mm256_loadu_pd((double *) (data2 + i)); //loads the first 4 elements of data2
-        __m256d load_data1_2 = _mm256_loadu_pd((double *) (data1 + i + 4)); //loads the next 4 elements of data1
-        __m256d load_data2_2 = _mm256_loadu_pd((double *) (data2 + i + 4)); //loads the next 4 elements of data2
-        __m256d subbed = _mm256_sub_pd(load_data1, load_data2);
-        __m256d subbed_2 = _mm256_sub_pd(load_data1_2, load_data2_2);
-        _mm256_storeu_pd((double *) (res + i), subbed);
-        _mm256_storeu_pd((double *) (res + i + 4), subbed_2);
-    }
+//     #pragma omp parallel for
+//     for (int i = 0; i < dims/4 * 4; i+= 4) {
+//         __m256d load_data1 = _mm256_loadu_pd((double *) (data1 + i)); //loads the first 4 elements of data1
+//         __m256d load_data2 = _mm256_loadu_pd((double *) (data2 + i)); //loads the first 4 elements of data2
+//         __m256d load_data1_2 = _mm256_loadu_pd((double *) (data1 + i + 4)); //loads the next 4 elements of data1
+//         __m256d load_data2_2 = _mm256_loadu_pd((double *) (data2 + i + 4)); //loads the next 4 elements of data2
+//         __m256d subbed = _mm256_sub_pd(load_data1, load_data2);
+//         __m256d subbed_2 = _mm256_sub_pd(load_data1_2, load_data2_2);
+//         _mm256_storeu_pd((double *) (res + i), subbed);
+//         _mm256_storeu_pd((double *) (res + i + 4), subbed_2);
+//     }
 
-    //tail case
-    for (int i = dims/4 * 4; i < dims; i++) {
-        res[i] = data1[i] - data2[i];
-    }
-    return 0;
-}
+//     //tail case
+//     for (int i = dims/4 * 4; i < dims; i++) {
+//         res[i] = data1[i] - data2[i];
+//     }
+//     return 0;
+// }
 
 /*
 * Transposes matrix mat2. Returns the computation of transposing matrix mat2 to matrix result.
 * Return 0 upon success.
 */
-// int transpose_matrix(matrix *result, matrix *mat2) {
-//     // 3x2 mat2 -> 2x3 result 
-//     //result is allocated outside of transpose_matrix function call inside mul_matrix
-//     int rowL = mat2->rows;
-//     int colL = mat2->cols;
-//     //read the columns of matrix mat2
-//     //the column becomes the row in result
-//     //
-//     //#pragma omp parallel for collapse(2)
+int transpose_matrix(matrix *result, matrix *mat2) {
+    // 3x2 mat2 -> 2x3 result 
+    //result is allocated outside of transpose_matrix function call inside mul_matrix
+    int rowL = mat2->rows;
+    int colL = mat2->cols;
+    //read the columns of matrix mat2
+    //the column becomes the row in result
+    //
+    //#pragma omp parallel for collapse(2)
 
-//     for (int col = 0; col < colL; col++) {
-//         for (int row = 0; row < rowL; row++) {
-//             result[] = mat2[];
-//         }
-//     }
+    for (int col = 0; col < colL; col++) {
+        for (int row = 0; row < rowL; row++) {
+            result[row + col] = mat2[row * colL + col]; //column major order
+        }
+    }
 
-//     return 0;
-// }
+    return 0;
+}
 
 /*
  * Store the result of multiplying mat1 and mat2 to `result`.
