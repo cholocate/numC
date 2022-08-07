@@ -189,16 +189,16 @@ void fill_matrix(matrix *mat, double val) {
     int size = rows * cols;
     double *data = mat->data;
 
-    #pragma omp parallel for
-    for (int i = 0; i < size/4 * 4; i+= 4) {
-        data[i] = val;
-        data[i + 1] = val;
-        data[i + 2] = val;
-        data[i + 3] = val;
+    __m256d vector = _mm256_set1_pd(val);
+    for (int i = 0; i < size/16 * 16; i+= 16) {
+        _mm256_storeu_pd((double *) (data + i), vector);
+        _mm256_storeu_pd((double *) (data + i + 4), vector);
+        _mm256_storeu_pd((double *) (data + i + 8), vector);
+        _mm256_storeu_pd((double *) (data + i + 12), vector);
     }
 
     //tail case 
-    for (int i = size/4 * 4; i < size; i++) {
+    for (int i = size/16 * 16; i < size; i++) {
         data[i] = val;
     }
 }
@@ -268,7 +268,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     res[i] = data1[i] + data2[i];
     // }
 
-    for (unsigned int i = 0; i < dims/4 * 4; i+= 8) {
+    for (unsigned int i = 0; i < dims/8 * 8; i+= 8) {
         __m256d load_data1 = _mm256_loadu_pd((double *) (data1 + i)); //loads the first 4 elements of data1
         __m256d load_data2 = _mm256_loadu_pd((double *) (data2 + i)); //loads the first 4 elements of data2
         __m256d load_data1_2 = _mm256_loadu_pd((double *) (data1 + i + 4)); //loads the next 4 elements of data1
@@ -282,7 +282,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
         // //tail case
 
-    for (int i = dims/4 * 4; i < dims; i++) {
+    for (int i = dims/8 * 8; i < dims; i++) {
         res[i] = data1[i] + data2[i];
     }
 
