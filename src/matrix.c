@@ -278,6 +278,23 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
  */
 int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.5 TODO
+    int dims = mat1->rows * mat1->cols;
+    double *data1 = mat1->data;
+    double *data2 = mat2->data;
+    double *res = result->data;
+
+    #pragma omp parallel for
+    for (int i = 0; i < dims/4 * 4; i+= 4) {
+        res[i] = data2[i] - data1[i];
+        res[i + 1] = data2[i + 1] - data1[i + 1];
+        res[i + 2] = data2[i + 2] - data1[i + 2];
+        res[i + 3] = data2[i + 3] - data1[i + 3];
+    }
+
+    //tail case
+    for (int i = dims/4 * 4; i < dims; i++) {
+        res[i] = data2[i] - data1[i];
+    }
     return 0;
 }
 
