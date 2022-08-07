@@ -342,7 +342,7 @@ int main (void)
         (CU_add_test(pSuite, "dealloc_null_test", dealloc_null_test) == NULL) ||
         (CU_add_test(pSuite, "get_test", get_test) == NULL) ||
         (CU_add_test(pSuite, "set_test", set_test) == NULL) ||
-        (CU_add_test(pSuite, "sub_test", sub_test) == NULL)
+        (CU_add_test(pSuite, "trasnpose_matrix", transpose_test) == NULL)        
      )
    {
       CU_cleanup_registry();
