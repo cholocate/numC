@@ -190,6 +190,7 @@ void fill_matrix(matrix *mat, double val) {
     double *data = mat->data;
 
     __m256d vector = _mm256_set1_pd(val);
+    #pragma omp parallel for
     for (int i = 0; i < size/16 * 16; i+= 16) {
         _mm256_storeu_pd((double *) (data + i), vector);
         _mm256_storeu_pd((double *) (data + i + 4), vector);
@@ -198,6 +199,7 @@ void fill_matrix(matrix *mat, double val) {
     }
 
     //tail case 
+    #pragma omp parallel for
     for (int i = size/16 * 16; i < size; i++) {
         data[i] = val;
     }
@@ -233,7 +235,7 @@ int abs_matrix(matrix *result, matrix *mat) {
         _mm256_storeu_pd((double *) (data_res + i), max1);
         _mm256_storeu_pd((double *) (data_res + i + 4 ), max2);
     }
-    # pragma omp parallel for 
+    //# pragma omp parallel for 
     for (int i = size/8 * 8; i < size; i++) {
         data_res[i] = data[i] > 0? data[i]: -data[i];
     }
@@ -318,10 +320,14 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     #pragma omp parallel for
     for (int i = 0; i < dims/4 * 4; i+= 4) {
-        res[i] = data1[i] - data2[i];
-        res[i + 1] = data1[i + 1] - data2[i + 1];
-        res[i + 2] = data1[i + 2] - data2[i + 2];
-        res[i + 3] = data1[i + 3] - data2[i + 3];
+        __m256d load_data1 = _mm256_loadu_pd((double *) (data1 + i)); //loads the first 4 elements of data1
+        __m256d load_data2 = _mm256_loadu_pd((double *) (data2 + i)); //loads the first 4 elements of data2
+        __m256d load_data1_2 = _mm256_loadu_pd((double *) (data1 + i + 4)); //loads the next 4 elements of data1
+        __m256d load_data2_2 = _mm256_loadu_pd((double *) (data2 + i + 4)); //loads the next 4 elements of data2
+        __m256d subbed = _mm256_sub_pd(load_data1, load_data2);
+        __m256d subbed_2 = _mm256_sub_pd(load_data1_2, load_data2_2);
+        _mm256_storeu_pd((double *) (res + i), subbed);
+        _mm256_storeu_pd((double *) (res + i + 4), subbed_2);
     }
 
     //tail case

@@ -34,28 +34,38 @@ class TestAdd(TestCase):
         print_speedup(speed_up)
 
 # (OPTIONAL) Uncomment the following TestSub class if you have implemented matrix subtraction.
-# class TestSub(TestCase):
-#    def test_small_sub(self):
-#        # TODO: YOUR CODE HERE
-#        dp_mat1, nc_mat1 = rand_dp_nc_matrix(2, 2, seed=0)
-#        dp_mat2, nc_mat2 = rand_dp_nc_matrix(2, 2, seed=1)
-#        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
-#        self.assertTrue(is_correct)
-#        try:
-#            nc.Matrix(3, 3) - nc.Matrix(2, 2)
-#            self.assertTrue(False)
-#        except ValueError as e:
-#            print(e)
-#            pass
-#        print_speedup(speed_up)
-#
-#    def test_medium_sub(self):
-#        # TODO: YOUR CODE HERE
-#        pass
-#
-#    def test_large_sub(self):
-#        # TODO: YOUR CODE HERE
-#        pass
+class TestSub(TestCase):
+    def test_small_sub(self):
+        # TODO: YOUR CODE HERE
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(2, 2, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(2, 2, seed=1)
+        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
+        self.assertTrue(is_correct)
+        try:
+            nc.Matrix(3, 3) - nc.Matrix(2, 2)
+            self.assertTrue(False)
+        except ValueError as e:
+            print(e)
+            pass
+        print_speedup(speed_up)
+
+    def test_medium_sub(self):
+        # TODO: YOUR CODE HERE
+        dp_mat1, nc_mat1 = rand_dp_nc_matrix(100, 100, seed=0)
+        dp_mat2, nc_mat2 = rand_dp_nc_matrix(100, 100, seed=1)
+        is_correct, speed_up = compute([dp_mat1, dp_mat2], [nc_mat1, nc_mat2], "sub")
+        self.assertTrue(is_correct)
+        try:
+            nc.Matrix(3, 3) - nc.Matrix(2, 2)
+            self.assertTrue(False)
+        except ValueError as e:
+            print(e)
+            pass
+        print_speedup(speed_up)
+
+    def test_large_sub(self):
+        # TODO: YOUR CODE HERE
+        pass
 
 class TestAbs(TestCase):
     def test_small_abs(self):
