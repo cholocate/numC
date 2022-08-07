@@ -222,7 +222,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     //     data_res[i + 3] = data[i + 3] > 0? data[i + 3]: -data[i + 3];
     // }
     __m256d neg = _mm256_set1_pd(-1);
-
+    # pragma omp parallel for 
     for (int i = 0; i < size/ 8 * 8; i+= 8) {
         __m256d load_data1 = _mm256_loadu_pd((double *) (data + i)); //loads the first 4 elements of data
         __m256d load_data2 = _mm256_loadu_pd((double *) (data + i + 4)); //loads the next 4 elements of data
@@ -233,7 +233,7 @@ int abs_matrix(matrix *result, matrix *mat) {
         _mm256_storeu_pd((double *) (data_res + i), max1);
         _mm256_storeu_pd((double *) (data_res + i + 4 ), max2);
     }
-
+    # pragma omp parallel for 
     for (int i = size/8 * 8; i < size; i++) {
         data_res[i] = data[i] > 0? data[i]: -data[i];
     }
@@ -298,6 +298,8 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
 
     return 0;
+
+    
 }
 
 /*
