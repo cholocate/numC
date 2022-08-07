@@ -292,7 +292,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
 
         // //tail case
-    #pragma omp parallel for 
+    // #pragma omp parallel for 
     for (int i = dims/8 * 8; i < dims; i++) {
         res[i] = data1[i] + data2[i];
     }
