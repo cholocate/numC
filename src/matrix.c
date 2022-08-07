@@ -255,18 +255,37 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     double *data2 = mat2->data;
     double *res = result->data;
 
-    #pragma omp parallel for
-    for (int i = 0; i < dims/4 * 4; i+= 4) {
-        res[i] = data1[i] + data2[i];
-        res[i + 1] = data1[i + 1] + data2[i + 1];
-        res[i + 2] = data1[i + 2] + data2[i + 2];
-        res[i + 3] = data1[i + 3] + data2[i + 3];
+    // #pragma omp parallel for
+    // for (int i = 0; i < dims/4 * 4; i+= 4) {
+    //     res[i] = data1[i] + data2[i];
+    //     res[i + 1] = data1[i + 1] + data2[i + 1];
+    //     res[i + 2] = data1[i + 2] + data2[i + 2];
+    //     res[i + 3] = data1[i + 3] + data2[i + 3];
+    // }
+
+    // //tail case
+    // for (int i = dims/4 * 4; i < dims; i++) {
+    //     res[i] = data1[i] + data2[i];
+    // }
+
+    
+    for (unsigned int i = 0; i < dims/4 * 4; i+= 8) {
+        __m256d load_data1 = _mm256_loadu_pd((__m256d *) (data1 + i)); //loads the first 4 elements of data1
+        __m256d load_data2 = _mm256_loadu_pd((__m256d *) (data2 + i)); //loads the first 4 elements of data2
+        __m256d load_data1_2 = _mm256_loadu_pd((__m256d *) (data1 + i + 4)); //loads the next 4 elements of data1
+        __m256d load_data2_2 = _mm256_loadu_pd((__m256d *) (data2 + i + 4)); //loads the next 4 elements of data2
+        __m256d added = _mm256_add_pd(load_data1, load_data2);
+        __m256d added_2 = _mm256_add_pd(load_data1_2, load_data2_2);
+        _mm256_storeu_pd((__m256d *) (res + i), added);
+        _mm256_storeu_pd((__m256d *) (res + i + 4), added_2);
+
     }
 
-    //tail case
+        // //tail case
     for (int i = dims/4 * 4; i < dims; i++) {
         res[i] = data1[i] + data2[i];
     }
+
     return 0;
 }
 
