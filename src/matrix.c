@@ -215,15 +215,26 @@ int abs_matrix(matrix *result, matrix *mat) {
     double *data_res = result->data;
     int size = mat->rows * mat->cols;
 
-    #pragma omp parallel for 
-    for (int i = 0; i < size/4 * 4; i+= 4) {
-        data_res[i] = data[i] > 0? data[i]: -data[i];
-        data_res[i + 1] = data[i + 1] > 0? data[i + 1]: -data[i + 1];
-        data_res[i + 2] = data[i + 2] > 0? data[i + 2]: -data[i + 2];
-        data_res[i + 3] = data[i + 3] > 0? data[i + 3]: -data[i + 3];
+    // for (int i = 0; i < size/4 * 4; i+= 4) {
+    //     data_res[i] = data[i] > 0? data[i]: -data[i];
+    //     data_res[i + 1] = data[i + 1] > 0? data[i + 1]: -data[i + 1];
+    //     data_res[i + 2] = data[i + 2] > 0? data[i + 2]: -data[i + 2];
+    //     data_res[i + 3] = data[i + 3] > 0? data[i + 3]: -data[i + 3];
+    // }
+    __m256d neg = _mm256_set1_pd(-1);
+
+    for (int i = 0; i < size/ 8 * 8; i+= 8) {
+        __m256d load_data1 = _mm256_loadu_pd((double *) (data + i)); //loads the first 4 elements of data
+        __m256d load_data2 = _mm256_loadu_pd((double *) (data + i + 4)); //loads the next 4 elements of data
+        __m256d opp1 = _mm256_mul_pd(neg, load_data1);
+        __m256d opp2 = _mm256_mul_pd(neg, load_data2);
+        __m256d max1 = _mm256_max_pd(opp1, load_data1);
+        __m256d max2 = _mm256_max_pd(opp2, load_data2);
+        _mm256_storeu_pd((double *) (data_res + i), max1);
+        _mm256_storeu_pd((double *) (data_res + i + 4 ), max2);
     }
 
-    for (int i = size/4 * 4; i < size; i++) {
+    for (int i = size/8 * 8; i < size; i++) {
         data_res[i] = data[i] > 0? data[i]: -data[i];
     }
     
