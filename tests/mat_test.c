@@ -119,29 +119,29 @@ void add_test(void) {
 }
 
 // (OPTIONAL) Uncomment the following sub_test if you have decided to implement it in matrix.c.
-void sub_test(void) {
-  matrix *result = NULL;
-  matrix *mat1 = NULL;
-  matrix *mat2 = NULL;
-  CU_ASSERT_EQUAL(allocate_matrix(&result, 2, 2), 0);
-  CU_ASSERT_EQUAL(allocate_matrix(&mat1, 2, 2), 0);
-  CU_ASSERT_EQUAL(allocate_matrix(&mat2, 2, 2), 0);
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < 2; j++) {
-      set(mat1, i, j, i * 2 + j);
-      set(mat2, i, j, (i * 2 + j) * 3);
-    }
-  }
-  sub_matrix(result, mat1, mat2);
-  for (int i = 0; i < 2; i++) {
-    for (int j = 0; j < 2; j++) {
-      CU_ASSERT_EQUAL(get(result, i, j), (-2) * (i * 2 + j));
-    }
-  }
-  deallocate_matrix(result);
-  deallocate_matrix(mat1);
-  deallocate_matrix(mat2);
-}
+// void sub_test(void) {
+//   matrix *result = NULL;
+//   matrix *mat1 = NULL;
+//   matrix *mat2 = NULL;
+//   CU_ASSERT_EQUAL(allocate_matrix(&result, 2, 2), 0);
+//   CU_ASSERT_EQUAL(allocate_matrix(&mat1, 2, 2), 0);
+//   CU_ASSERT_EQUAL(allocate_matrix(&mat2, 2, 2), 0);
+//   for (int i = 0; i < 2; i++) {
+//     for (int j = 0; j < 2; j++) {
+//       set(mat1, i, j, i * 2 + j);
+//       set(mat2, i, j, (i * 2 + j) * 3);
+//     }
+//   }
+//   sub_matrix(result, mat1, mat2);
+//   for (int i = 0; i < 2; i++) {
+//     for (int j = 0; j < 2; j++) {
+//       CU_ASSERT_EQUAL(get(result, i, j), (-2) * (i * 2 + j));
+//     }
+//   }
+//   deallocate_matrix(result);
+//   deallocate_matrix(mat1);
+//   deallocate_matrix(mat2);
+// }
 
 
 /* (OPTIONAL) Uncomment the following neg_test if you have decided to implement it in matrix.c.
@@ -199,7 +199,7 @@ void transpose_test(void) {
       set(mat, i, j, i * 2 + j);
     }
   }
-  transpose(result, mat);
+  transpose_matrix(result, mat);
   for (int i = 0; i < 2; i++) {
     for (int j = 0; j < 2; j++) {
       CU_ASSERT_EQUAL(get(result, i, j), j * 2 + i);
