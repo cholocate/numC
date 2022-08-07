@@ -286,15 +286,15 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     #pragma omp parallel for
     for (int i = 0; i < dims/4 * 4; i+= 4) {
-        res[i] = data2[i] - data1[i];
-        res[i + 1] = data2[i + 1] - data1[i + 1];
-        res[i + 2] = data2[i + 2] - data1[i + 2];
-        res[i + 3] = data2[i + 3] - data1[i + 3];
+        res[i] = data1[i] - data2[i];
+        res[i + 1] = data1[i + 1] - data2[i + 1];
+        res[i + 2] = data1[i + 2] - data2[i + 2];
+        res[i + 3] = data1[i + 3] - data2[i + 3];
     }
 
     //tail case
     for (int i = dims/4 * 4; i < dims; i++) {
-        res[i] = data2[i] - data1[i];
+        res[i] = data1[i] - data2[i];
     }
     return 0;
 }
