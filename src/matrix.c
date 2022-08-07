@@ -268,7 +268,6 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     res[i] = data1[i] + data2[i];
     // }
 
-    #pragma omp parallel for
     for (unsigned int i = 0; i < dims/4 * 4; i+= 8) {
         __m256d load_data1 = _mm256_loadu_pd((double *) (data1 + i)); //loads the first 4 elements of data1
         __m256d load_data2 = _mm256_loadu_pd((double *) (data2 + i)); //loads the first 4 elements of data2
