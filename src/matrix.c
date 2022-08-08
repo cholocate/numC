@@ -425,8 +425,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 int np_eye(matrix *result) {
 
     #pragma omp parallel for 
-    for (int i = 0; i < mat->rows; i++) {
-        (*result)->data[i + i * result->cols] = 1.0;
+    for (int i = 0; i < result->rows; i++) {
+        result->data[i + i * result->cols] = 1.0;
     }
 
     return 0;
