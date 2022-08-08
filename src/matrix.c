@@ -370,21 +370,31 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
     int rowR = mat1->rows;
     int colR = mat2->cols;
-    double data1;
-    double data2;
-    double curr;
+    // double data1;
+    // double data2;
+    // double curr;
 
-    for (int i = 0; i < rowR; i++) {
-        for (int j = 0; j < colR; j++) {
-            set(result, i, j, 0);
-            for (int k = 0; k < mat1->cols; k++) {
-                data1 = get(mat1, i, k);
-                data2 = get(mat2, k, j); 
-                curr = get(result, i, j);
-                set(result, i, j, curr + (data1 * data2));
-            }
-        }
-    }
+    // for (int i = 0; i < rowR; i++) {
+    //     for (int j = 0; j < colR; j++) {
+    //         set(result, i, j, 0);
+    //         for (int k = 0; k < mat1->cols; k++) {
+    //             data1 = get(mat1, i, k);
+    //             data2 = get(mat2, k, j); 
+    //             curr = get(result, i, j);
+    //             set(result, i, j, curr + (data1 * data2));
+    //         }
+    //     }
+    // }
+
+    matrix *transpose;
+    allocate_matrix(&transpose, mat2->cols, mat2->rows);
+
+
+
+
+
+    deallocate_matrix(transpose);
+
     return 0;
 }
 
