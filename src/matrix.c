@@ -252,6 +252,26 @@ int abs_matrix(matrix *result, matrix *mat) {
  */
 int neg_matrix(matrix *result, matrix *mat) {
     // Task 1.5 TODO
+    double *data = mat->data;
+    double *data_res = result->data;
+    int size = mat->rows * mat->cols;
+
+    __m512d zeroes = _mm512_setzero_pd();
+
+    #pragma omp parallel for
+    for (int i = 0; i < size/8 * 8; i+= 8) {
+        __m256d load_data1 = _mm256_loadu_pd((double *) (data + i)); //loads the first 4 elements of data
+        __m256d load_data2 = _mm256_loadu_pd((double *) (data + i + 4)); //loads the next 4 elements of data
+        __m256d neg1 = _mm256_sub_pd(zeroes, load_data1);
+        __m256d neg2 = _mm256_sub_pd(zeroes, load_data2);
+        _mm256_storeu_pd((double *) (data_res + i), neg1);
+        _mm256_storeu_pd((double *) (data_res + i + 4 ), neg2);
+    }
+
+    for (int i = size/8 * 8; i < size; i++) {
+        data_res[i] = -data[i];
+    }
+
     return 0;
 }
 
