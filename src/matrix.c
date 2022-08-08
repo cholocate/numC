@@ -428,19 +428,19 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                             // Zeroth 4 
                             mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i));
                             mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i ));
-                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, partial_row_sum);
                             // First 4 
                             mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 4));
                             mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 4));
-                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, partial_row_sum);
                             // Second 4 
                             mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 8));
                             mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 8));
-                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, partial_row_sum);
                             // Third 4 
                             mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 12));
                             mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 12));
-                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, partial_row_sum);
                         }
                         double temp[4];
                         _mm256_storeu_pd(temp, partial_row_sum);
