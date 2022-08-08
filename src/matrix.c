@@ -350,11 +350,9 @@ int transpose_matrix(matrix *result, matrix *mat2) {
     //the column becomes the row in result
     //
     //#pragma omp parallel for collapse(2)
-    int index = 0;
     for (int col = 0; col < colL; col++) {
         for (int row = 0; row < rowL; row++) {
-            result->data[index] = mat2->data[col + row * colL]; //column major order
-            index++;
+            result->data[col * rowL + row] = mat2->data[col + row * colL]; //column major order
         }
     }
 
