@@ -256,7 +256,7 @@ int neg_matrix(matrix *result, matrix *mat) {
     double *data_res = result->data;
     int size = mat->rows * mat->cols;
 
-    __m256d zeroes = _mm512_setzero_pd();
+    __m256d zeroes = _mm256_setzero_pd();
 
     #pragma omp parallel for
     for (int i = 0; i < size/8 * 8; i+= 8) {
