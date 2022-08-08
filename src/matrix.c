@@ -390,30 +390,30 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
     int rowR = mat1->rows;
     int colR = mat2->cols;
-    // double data1;
-    // double data2;
-    // double curr;
+    double data1;
+    double data2;
+    double curr;
 
-    // for (int i = 0; i < rowR; i++) {
-    //     for (int j = 0; j < colR; j++) {
-    //         set(result, i, j, 0);
-    //         for (int k = 0; k < mat1->cols; k++) {
-    //             data1 = get(mat1, i, k);
-    //             data2 = get(mat2, k, j); 
-    //             curr = get(result, i, j);
-    //             set(result, i, j, curr + (data1 * data2));
-    //         }
-    //     }
-    // }
+    for (int i = 0; i < rowR; i++) {
+        for (int j = 0; j < colR; j++) {
+            set(result, i, j, 0);
+            for (int k = 0; k < mat1->cols; k++) {
+                data1 = get(mat1, i, k);
+                data2 = get(mat2, k, j); 
+                curr = get(result, i, j);
+                set(result, i, j, curr + (data1 * data2));
+            }
+        }
+    }
 
-    matrix *transpose;
-    allocate_matrix(&transpose, mat2->cols, mat2->rows);
-
-
+    // matrix *transpose;
+    // allocate_matrix(&transpose, mat2->cols, mat2->rows);
 
 
 
-    deallocate_matrix(transpose);
+
+
+    // deallocate_matrix(transpose);
 
     return 0;
 }
@@ -422,17 +422,11 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 /* 
 * Stores the identity matrix in result.
 */
-int np_eye(matrix *result, double val) {
-    int dims = result->cols * result->cols;
-    int counter = 0;
-    for (int i = 0; i < dims; i++) {
-        if (i % result->cols == counter) {
-            result->data[i] = val;
-            i++;
-            counter++;
-        } else {
-            result->data[i] = 0.0;
-        }
+int np_eye(matrix *result) {
+
+    #pragma omp parallel for 
+    for (int i = 0; i < mat->rows; i++) {
+        (*result)->data[i + i * result->cols] = 1.0;
     }
 
     return 0;
@@ -451,7 +445,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     // Task 1.6 TODO
     int dims = result->cols * result->cols;
     if (pow == 0) {
-        np_eye(result, 1.0);
+        np_eye(result);
         return 0;
     } else if (pow == 1) {
         memcpy(result->data, mat->data, dims * sizeof(double));
