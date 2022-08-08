@@ -369,7 +369,7 @@ int transpose_matrix(matrix *result, matrix *mat2) {
     //read the columns of matrix mat2
     //the column becomes the row in result
     //
-    //#pragma omp parallel for collapse(2)
+    #pragma omp parallel for 
     for (int col = 0; col < colL; col++) {
         for (int row = 0; row < rowL; row++) {
             result->data[col * rowL + row] = mat2->data[col + row * colL]; //column major order
@@ -388,8 +388,8 @@ int transpose_matrix(matrix *result, matrix *mat2) {
  */
 int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     // Task 1.6 TODO
-    int rowR = mat1->rows;
-    int colR = mat2->cols;
+    // int rowR = mat1->rows;
+    // int colR = mat2->cols;
     // double data1;
     // double data2;
     // double curr;
@@ -408,6 +408,54 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     matrix *transpose;
     allocate_matrix(&transpose, mat2->cols, mat2->rows);
+    transpose_matrix(transpose, mat2); 
+    // CACHE BLOCKING SIZE 32 
+    int BLOCK_SIZE = 32; 
+    
+    #pragma omp parallel for
+    for (int row = 0; row < mat1->rows; i+= BLOCK_SIZE) {
+        for (int col = 0; col < mat2->cols; j += BLOCK_SIZE) {
+            for (int BLOCK_ROW = row; BLOCK_ROW < row + BLOCK_SIZE; BLOCK_ROW++) {
+                for (int BLOCK_COL = col; BLOCK_COL < col + BLOCK_SIZE; BLOCK_COL++) {
+                    // IF WE ARE STILL IN THE SAME ROW AND COL 
+                    if (BLOCK_ROW < mat1->rows && BLOCK_COL < mat2->cols) {
+                        __m256d mat1_input; 
+                        __m256d mat2T_input;
+                        result->data[BLOCK_ROW * result->cols + BLOCK_COL] = 0;
+                        __m256d partial_row_sum = _mm256_set1_pd(0);
+                        for (int i = 0; i < (mat1->cols / 16) * 16; i+= 16) {
+                            // OUR MATRIX HAS DIM >= 16 X 16
+                            // Zeroth 4 
+                            mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i));
+                            mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i ));
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            // First 4 
+                            mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 4));
+                            mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 4));
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            // Second 4 
+                            mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 8));
+                            mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 8));
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                            // Third 4 
+                            mat1_input = __m256_loadu_((mat1->data + BLOCK_ROW * mat1->cols + i + 12));
+                            mat2T_input = __m256_loadu_((transpose->data + BLOCK_COL * transpose->cols + i + 12));
+                            partial_row_sum = _mm256_fmadd_pd(mat1_input, mat2T_input, row_sum);
+                        }
+                        double temp[4];
+                        _mm256_storeu_pd(temp, partial_row_sum);
+                        // TAIL CASE FOR MATRIX WITH DIM < 16 X 16 OR REMAININGS OF EACH ROW 
+                        for (int i = (mat1->cols / 16) * 16; i < mat1->cols; i++) {
+                            // We are just adding the results together so doesn't matter what index is added
+                            temp[0] += mat1->data[BLOCK_ROW * mat1->cols + i] * transpose->data[BLOCK_COL * transpose->cols + i];
+                        }
+                        // STORING PARTIAL SUM AND TAIL CASE SUM INTO THAT ONE ELEMENT OF RESULT
+                        result->data[BLOCK_ROW * result->cols + BLOCK_COL] = temp[0] + temp[1] + temp[2] + temp[3];
+                    }
+                }
+            }
+        }
+    }
 
 
 
