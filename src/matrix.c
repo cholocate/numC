@@ -413,8 +413,8 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     int BLOCK_SIZE = 32; 
     
     #pragma omp parallel for
-    for (int row = 0; row < mat1->rows; i+= BLOCK_SIZE) {
-        for (int col = 0; col < mat2->cols; j += BLOCK_SIZE) {
+    for (int row = 0; row < mat1->rows; row+= BLOCK_SIZE) {
+        for (int col = 0; col < mat2->cols; col += BLOCK_SIZE) {
             for (int BLOCK_ROW = row; BLOCK_ROW < row + BLOCK_SIZE; BLOCK_ROW++) {
                 for (int BLOCK_COL = col; BLOCK_COL < col + BLOCK_SIZE; BLOCK_COL++) {
                     // IF WE ARE STILL IN THE SAME ROW AND COL 
